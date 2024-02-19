@@ -1,44 +1,50 @@
 class Solution {
-    private boolean winner(String OX, String[][] map){
-        //가로 확인
-        for(int i = 0; i<3; i++){
-            if(map[i][0].equals(OX) && map[i][1].equals(OX) && map[i][2].equals(OX))
-                return trun;
-        }
-        //세로 확인
-        for(int i = 0; i<3; i++){
-            if(map[0][i].equals(OX) && map[1][i].equals(OX) && map[2][i].equals(OX))
-                return trun;
-        }
-        //대각선 확인
-        if(map[0][0].equals(OX) && map[1][1].equals(OX) && map[2][2].equals(OX))
-            return trun;
-        if(map[0][2].equals(OX) && map[1][1].equals(OX) && map[2][0].equals(OX))
-            return trun;
-        
-        return false;    
-        
-    }
     public int solution(String[] board) {
-        String[][] map;
         int Ocnt = 0;
         int Xcnt = 0;
         
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
-                if(map[i][j].equals("O"))Ocnt++;
-                if(map[i][j].equals("X"))Xcnt++;
+                if(board[i].charAt(j)=='O')Ocnt++;
+                if(board[i].charAt(j)=='X')Xcnt++;
             }
         }
-        if(Ocnt==Xcnt && Ocnt>Xcnt+1){
+        if(Ocnt<Xcnt || Ocnt>Xcnt+1){
             return 0;
         }
         
-        
-        
-        
-        
-        
-        
+        if(winner(board,'O')){
+            if(Ocnt==Xcnt){
+                return 0;
+            }
+        }
+        if(winner(board,'X')){
+            if(Ocnt==Xcnt+1){
+                return 0;
+            }
+        }
+        return 1;
+    }
+     private static boolean winner(String[] board,char OX){
+        //가로 확인
+        for(int i = 0; i<3; i++){
+            if(board[i].charAt(0)==OX && board[i].charAt(1)==OX && board[i].charAt(2)==OX){
+            return true;
+            }
+        }
+        //세로 확인
+        for(int i = 0; i<3; i++){
+            if(board[0].charAt(i)==OX && board[1].charAt(i)==OX && board[2].charAt(i)==OX){
+            return true;
+            }
+        }
+        //대각선 확인
+        if(board[0].charAt(0)==OX && board[1].charAt(1)==OX && board[2].charAt(2)==OX){
+            return true;
+        }
+        if(board[2].charAt(0)==OX && board[1].charAt(1)==OX && board[0].charAt(2)==OX){
+            return true;
+        }
+        return false;
     }
 }
