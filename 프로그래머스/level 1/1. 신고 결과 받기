@@ -1,1 +1,42 @@
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+class Solution {
+    public int[] solution(String[] id_list, String[] report, int k) {
+        int[] answer = {};
+        answer = new int[id_list.length]; 
+        
+        Map<String, HashSet<String>> reported = new HashMap<>();
+        Map<String, Integer> answerMap = new HashMap<>();
+        
+        for(int i=0;i<id_list.length; i++){
+            HashSet<String> reportedId = new HashSet<>();
+            reported.put(id_list[i], reportedId);
+            answerMap.put(id_list[i], 0);
+        }
+        
+        for(String s : report){
+            String[] reportStr = s.split(" ");
+            String reportingID = reportStr[0];
+            String reportedID = reportStr[1];
+            reported.get(reportedID).add(reportingID);
+        }
+        
+        
+        for(String reportedUser : reported.keySet()){
+            HashSet<String> userReporter = reported.get(reportedUser);
+            if(userReporter.size()>=k){
+                for(String userId : userReporter){
+                    answerMap.put(userId, answerMap.get(userId)+1);
+                }
+            }
+        }
+        
+        for(int i=0;i<id_list.length;i++){
+            answer[i] = answerMap.get(id_list[i]);
+        }
+        return answer;
+    }
+}
