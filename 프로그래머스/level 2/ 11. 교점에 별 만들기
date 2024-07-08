@@ -1,0 +1,70 @@
+    ```java
+        //1. 한개의 직선과 나머지 직선의 교점 구하여 저장(만난 직선은 빼고 비교, 정수가 아니면 저장x, 평행인 경우 pass)
+        //2. 구한 교점의 x축의 최댓값/최소값, y축의 최댓값/최소값 구하기
+        //3. 최소값부터 최대값까지 점 찍기
+        //4. 교점에 별 찍기
+        
+        import java.util.*;
+        
+        class Solution {
+            public String[] solution(int[][] line) {
+                List<long[]> point = new ArrayList<>();
+                
+                long minx = Long.MAX_VALUE;
+                long maxx = Long.MIN_VALUE;
+                long miny = Long.MAX_VALUE;
+                long maxy = Long.MIN_VALUE;
+                
+                for(int i=0; i<line.length; i++){           // 직선 선택
+                    long A = line[i][0];     
+                    long B = line[i][1];     
+                    long E = line[i][2];     
+                    for(int j = i+1; j<line.length; j++){   // 선택한 직선 외 다른 직선 선택
+                        long C = line[j][0];     
+                        long D = line[j][1];     
+                        long F = line[j][2];     
+                        
+                        if(A*D - B*C == 0) continue;        // 공식의 분모가 0일 경우 continue
+                        
+                        double x = (double)(B*F - E*D) / (A*D - B*C); // 교점 구하기
+                        double y = (double)(E*C - A*F) / (A*D - B*C);
+                        
+                        if(x % 1 != 0 || y % 1 != 0) continue;  // 정수가 아닐 경우 continue
+                        
+                        long ix = (long) x;
+                        long iy = (long) y;
+                        point.add(new long[]{ix, iy}); // 교점 넣기
+        
+                        minx = Math.min(minx, ix);   // x, y의 최솟값, 최댓값 저장
+                        miny = Math.min(miny, iy);
+                        maxx = Math.max(maxx, ix);
+                        maxy = Math.max(maxy, iy);
+                    }
+                }
+                
+                long height = maxy - miny + 1;        // 최솟값과 최댓값으로 별이 포함된 최소 사각형 구하기
+                long width = maxx - minx + 1;
+                
+                char[][] map = new char[(int) height][(int) width];
+                for(int i = 0; i < height; i++) {          // 점 찍기
+                    for(int j = 0; j < width; j++) {
+                        map[i][j] = '.';
+                    }
+                }
+                
+                for(long[] p : point) {          // 별 찍기
+                    int x = (int) (p[0] - minx);
+                    int y = (int) (maxy - p[1]);
+                    map[y][x] = '*';
+                }
+                
+                String[] answer = new String[map.length];   // 해당 값 넣어서 return
+                for(int i = 0; i < answer.length; i++) {
+                    answer[i] = new String(map[i]);
+                }
+                
+                return answer;
+            }
+        }
+    
+    ```
